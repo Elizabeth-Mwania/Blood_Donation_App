@@ -3,7 +3,7 @@ pandas
 numpy
 plotly
 folium
-streamlit-folium
+logging
 scikit-learn
 matplotlib
 seaborn
@@ -11,3 +11,42 @@ wordcloud
 textblob
 requests
 pillow
+
+
+# Updated Project Structure for Blood Donation Campaign Dashboard
+# Blood_Donation_Project/
+# │
+# ├── data/                          # Directory for data files
+# │   ├── Challenge dataset.xlsx      # Dataset for analysis
+# │   ├── Blood_Donation_Dashboard_Plan.xlsx # Planning document
+# │   ├── Dataset Description.pdf      # Description of the dataset
+# │   ├── Challenge Proposal.pdf       # Proposal document
+# │   └── Proposition de Challenge.pdf  # Additional proposal document
+# │
+# ├── notebooks/                     # Directory for Jupyter notebooks
+# │   └── Blood_code.ipynb           # Jupyter notebook for analysis
+# │
+# ├── src/                           # Source code directory
+# │   ├── __init__.py                # Makes src a package
+# │   ├── Blood_dash.py              # Main application script
+# │   ├── visualizations.py           # Module for creating visualizations
+# │   ├── data_processing.py          # Module for data processing and cleaning
+# │   ├── user_interface.py           # Module for user interface components
+# │   ├── sentiment_analysis.py        # Module for sentiment analysis of feedback
+# │   ├── donor_profiling.py          # Module for profiling ideal donors
+# │   ├── campaign_analysis.py         # Module for analyzing campaign effectiveness
+# │   ├── donor_retention.py           # Module for analyzing donor retention
+# │   └── eligibility_prediction.py     # Module for the eligibility prediction model
+# │
+# ├── tests/                         # Directory for unit tests
+# │   ├── test_visualizations.py      # Tests for visualization functions
+# │   ├── test_data_processing.py     # Tests for data processing functions
+# │   ├── test_user_interface.py      # Tests for user interface components
+# │   ├── test_sentiment_analysis.py   # Tests for sentiment analysis functions
+# │   ├── test_donor_profiling.py      # Tests for donor profiling functions
+# │   ├── test_campaign_analysis.py     # Tests for campaign analysis functions
+# │   └── test_donor_retention.py      # Tests for donor retention functions
+# │
+# ├── requirements.txt               # Python dependencies
+# ├
+# └── README.md   
