@@ -51,14 +51,13 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# Load data function
+    # Load data function
+import folium
+
 @st.cache_data
 def load_data():
-    # Replace with actual data loading
-    import pandas as pd
-
-    # Load all sheets into a dictionary of DataFrames
-    file_path = file_path = "D:\\INDABAX-HACKATHON\\Indabax_Project_Blood\\data\\Challenge_dataset.xlsx"
+    # Load the Challenge_dataset.xlsx file
+    file_path = "data/Challenge_dataset.xlsx"
 
     dfs = pd.read_excel(file_path, sheet_name=None)  # None loads all sheets
 
@@ -69,10 +68,25 @@ def load_data():
 
     df_combined = pd.concat(dfs.values(), ignore_index=True)
 
-    return df_2019, df_2020, df_Volonteer, df_combined
+    return df_combined
 
 
-# Individual page functions
+    # Function to show donor distribution on a map
+    def show_donor_distribution(df):
+        # Create a map centered around a specific location
+        m = folium.Map(location=[latitude, longitude], zoom_start=10)
+
+        # Add donor locations to the map
+        for idx, row in df.iterrows():
+            folium.Marker(
+                location=[row['Latitude'], row['Longitude']],
+                popup=row['Quartier de Résidence'],
+                icon=folium.Icon(color='blue' if row['ÉLIGIBILITÉ AU DON.'] == 'Eligible' else 'red')
+            ).add_to(m)
+
+        # Display the map
+        folium_static(m)
+
 def show_overview(df):
     df_2019 = df[0]
     df_2020 = df[1]
@@ -203,6 +217,67 @@ def show_overview(df):
         st.plotly_chart(fig, use_container_width=True)
 
 
+def show_donor_distribution(df):
+    st.title("Donor Distribution Analysis")
+    
+    # Geographical distribution
+    st.subheader("Geographical Distribution of Donors")
+    
+    # Create a map centered on the country
+    m = folium.Map(location=[4.0383, 9.7047], zoom_start=10)  # Coordinates for Cameroon
+    
+    # Add markers for each district
+    district_counts = df['Arrondissement de résidence'].value_counts().reset_index()
+    district_counts.columns = ['District', 'Donor Count']
+    
+    for index, row in district_counts.iterrows():
+        folium.Marker(
+            location=[np.random.uniform(3.8, 4.2), np.random.uniform(9.6, 9.8)],  # Random coordinates within Cameroon
+            popup=f"{row['District']}: {row['Donor Count']} donors",
+            icon=folium.Icon(color='red', icon='tint')
+        ).add_to(m)
+    
+    folium_static(m)
+    
+    # Donor distribution by district
+    st.subheader("Donor Count by District")
+    fig = px.bar(
+        district_counts,
+        x='District',
+        y='Donor Count',
+        title='Number of Donors per District',
+        color='Donor Count',
+        color_continuous_scale='Reds'
+    )
+    st.plotly_chart(fig, use_container_width=True)
+    
+    # Age and gender distribution
+    st.subheader("Age and Gender Distribution")
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        fig = px.histogram(
+            df,
+            x='Age',
+            color='Sexe',
+            title='Age Distribution by Gender',
+            barmode='overlay',
+            color_discrete_map={'Male': '#1f77b4', 'Female': '#ff7f0e'}
+        )
+        st.plotly_chart(fig, use_container_width=True)
+    
+    with col2:
+        fig = px.box(
+            df,
+            x='Sexe',
+            y='Age',
+            title='Age Distribution by Gender',
+            color='Sexe',
+            color_discrete_map={'Male': '#1f77b4', 'Female': '#ff7f0e'}
+        )
+        st.plotly_chart(fig, use_container_width=True)
+
 def show_health_eligibility(df):
     df_2019 = df[0]
     df_2020 = df[1]
@@ -297,10 +372,12 @@ def main():
         return
     
     # Display selected page
+    if page == "Donor Distribution":
+        show_donor_distribution(df)
     if page == "Overview":
         show_overview(df)
-    #elif page == "Donor Distribution":
-    #    show_donor_distribution(df)
+    elif page == "Donor Distribution":
+       show_donor_distribution(df)
     elif page == "Health & Eligibility":
         show_health_eligibility(df)
     #elif page == "Donor Profiles":
