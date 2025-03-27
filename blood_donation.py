@@ -24,8 +24,8 @@ import io
 from datetime import datetime, date
 
 # Download NLTK data 
-#nltk.download('vader_lexicon')
-#nltk.download('stopwords')
+# nltk.download('vader_lexicon')
+# nltk.download('stopwords')
 
 # Initialize session state variables
 if 'new_candidates' not in st.session_state:
@@ -40,7 +40,7 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded"
 )
-  # Rest of your Streamlit app
+# Rest of your Streamlit app
 st.title(" Blood Donation Dashboard")
 # Create a container for the header
 st.markdown("""
@@ -244,6 +244,7 @@ def load_models():
 donor_candidates_birth, donors = load_data()
 geo_data = load_geo_data()
 models = load_models()
+
 
 # Sidebar
 with st.sidebar:
